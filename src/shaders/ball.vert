@@ -18,6 +18,6 @@ void main()
     gl_Position = projection * view * model * vec4(position, 1.0);
 
     fragPosition = vec3(model * vec4(position, 1.0));
-    fragNormal = normal;
+    fragNormal = mat3(transpose(inverse(model))) * normal;
     fragUV = uv;
 }

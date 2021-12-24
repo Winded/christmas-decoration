@@ -1,4 +1,4 @@
-import { mat4 } from '../../webgl-framework/GLMatrix/index.js';
+import { mat4, vec3, vec4 } from '../../webgl-framework/GLMatrix/index.js';
 import * as Camera from '../../webgl-framework/DataSources/Camera.js';
 import { loadShader, loadStandardVertexBuffer, loadTexture } from '../../webgl-framework/WebGLUtil.js';
 import { requestImage, requestText } from '../../webgl-framework/Ajax.js';
@@ -13,6 +13,15 @@ let mesh = null;
 
 let ballMatrix = mat4.create();
 let cylinderMatrix = mat4.create();
+
+const light = {
+    origin: vec3.fromValues(10, 10, 10),
+    color: vec4.fromValues(1, 1, 1, 1),
+    intensity: 10,
+    range: 20,
+}
+
+const ambientLight = vec4.fromValues(0.1, 0.1, 0.1, 1);
 
 let ready = false;
 
@@ -37,7 +46,7 @@ export function start(gl) {
 }
 
 export function update(deltaTime) {
-    mat4.rotateY(ballMatrix, ballMatrix, (45 / 180) * Math.PI * deltaTime);
+    mat4.rotateY(ballMatrix, ballMatrix, (15 / 180) * Math.PI * deltaTime);
 }
 
 /**
@@ -59,6 +68,12 @@ export function render(deltaTime, gl) {
     gl.uniformMatrix4fv(gl.getUniformLocation(shader, "projection"), false, Camera.properties.projectionMatrix);
     gl.uniformMatrix4fv(gl.getUniformLocation(shader, "view"), false, Camera.properties.viewMatrix);
     gl.uniformMatrix4fv(gl.getUniformLocation(shader, "model"), false, ballMatrix);
+
+    gl.uniform3fv(gl.getUniformLocation(shader, "light.origin"), light.origin);
+    gl.uniform4fv(gl.getUniformLocation(shader, "light.color"), light.color);
+    gl.uniform1f(gl.getUniformLocation(shader, "light.intensity"), light.intensity);
+    gl.uniform1f(gl.getUniformLocation(shader, "light.range"), light.range);
+    gl.uniform4fv(gl.getUniformLocation(shader, "ambient_color"), ambientLight);
 
     gl.drawElements(gl.TRIANGLES, mesh.numIndices, gl.UNSIGNED_INT, 0);
 }

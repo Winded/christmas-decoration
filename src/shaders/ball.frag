@@ -11,8 +11,8 @@ struct Light
 
 uniform sampler2D diffuse_texture;
 
-//uniform vec4 ambient_color;
-//uniform Light light;
+uniform vec4 ambient_color;
+uniform Light light;
 
 in vec3 fragPosition;
 in vec3 fragNormal;
@@ -22,8 +22,6 @@ out vec4 frag_color;
 
 void main()
 {
-    frag_color = texture(diffuse_texture, fragUV.xy);
-    /*
     vec4 albedo = texture(diffuse_texture, fragUV.xy);
 
     vec3 lightDir = normalize(fragPosition - light.origin);
@@ -33,5 +31,4 @@ void main()
 
     vec4 color = ambient_color + (light.color * intensity * diff);
     frag_color = albedo * color;
-    */
 }
