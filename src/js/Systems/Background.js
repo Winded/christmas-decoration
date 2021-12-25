@@ -1,8 +1,8 @@
-import { quad as quadMesh } from '../../webgl-framework/PrimitiveMesh.js';
-import { loadShader, loadStandardVertexBuffer, loadTexture } from '../../webgl-framework/WebGLUtil.js';
+import { loadShader, loadTexture } from '../../webgl-framework/WebGLUtil.js';
 import { requestImage, requestText } from '../../webgl-framework/Ajax.js';
 import { mat4, vec3 } from '../../webgl-framework/GLMatrix/index.js';
 import * as Camera from '../../webgl-framework/DataSources/Camera.js';
+import * as SharedResources from '../DataSources/SharedResources.js';
 
 let mesh = null;
 let texture = null;
@@ -13,7 +13,7 @@ let modelMatrix = mat4.create();
 let ready = false;
 
 async function setup(gl) {
-    mesh = loadStandardVertexBuffer(gl, quadMesh.vertices, quadMesh.indices);
+    mesh = SharedResources.resources.quadMesh;
     texture = loadTexture(gl, await requestImage("/assets/textures/background.png"));
     shader = loadShader(gl, await requestText("/shaders/unlit.vert"), await requestText("/shaders/unlit.frag"));
 

@@ -11,13 +11,17 @@ let textures = {
 };
 let mesh = null;
 
+let wireShader = null;
+let wireTexture = null;
+let quadMesh = null;
+
 let ballMatrix = mat4.create();
-let cylinderMatrix = mat4.create();
+let wireMatrix = mat4.create();
 
 const light = {
     origin: vec3.fromValues(10, 10, 10),
     color: vec4.fromValues(1, 1, 1, 1),
-    intensity: 10,
+    intensity: 8,
     range: 20,
 }
 
@@ -34,6 +38,10 @@ async function setup(gl) {
     textures.diffuse = loadTexture(gl, await requestImage("/assets/textures/snowflake-ball.png"));
     mesh = sharedResources.sphereMesh;
 
+    wireShader = loadShader(gl, await requestText("/shaders/unlit.vert"), await requestText("/shaders/unlit.frag"));
+    wireTexture = loadTexture(gl, await requestImage("/assets/textures/white.png"));
+    quadMesh = sharedResources.quadMesh;
+
     ready = true;
 }
 
@@ -43,6 +51,9 @@ async function setup(gl) {
  */
 export function start(gl) {
     setup(gl);
+
+    mat4.translate(wireMatrix, wireMatrix, vec3.fromValues(0, 2, 0));
+    mat4.scale(wireMatrix, wireMatrix, vec3.fromValues(0.05, 2, 1));
 }
 
 export function update(deltaTime) {
@@ -76,4 +87,14 @@ export function render(deltaTime, gl) {
     gl.uniform4fv(gl.getUniformLocation(shader, "ambient_color"), ambientLight);
 
     gl.drawElements(gl.TRIANGLES, mesh.numIndices, gl.UNSIGNED_INT, 0);
+
+    gl.useProgram(wireShader);
+    gl.bindTexture(gl.TEXTURE_2D, wireTexture);
+    gl.bindVertexArray(quadMesh.vao);
+
+    gl.uniformMatrix4fv(gl.getUniformLocation(wireShader, "projection"), false, Camera.properties.projectionMatrix);
+    gl.uniformMatrix4fv(gl.getUniformLocation(wireShader, "view"), false, Camera.properties.viewMatrix);
+    gl.uniformMatrix4fv(gl.getUniformLocation(wireShader, "model"), false, wireMatrix);
+
+    gl.drawElements(gl.TRIANGLES, quadMesh.numIndices, gl.UNSIGNED_INT, 0);
 }
