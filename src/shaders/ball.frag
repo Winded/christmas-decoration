@@ -12,6 +12,8 @@ struct Light
 uniform sampler2D diffuse_texture;
 uniform sampler2D webcam_texture;
 
+uniform bool webcam_enabled;
+
 uniform mat4 view;
 
 uniform vec4 ambient_color;
@@ -34,7 +36,7 @@ void main()
 
     vec4 webcam = texture(webcam_texture, webcam_uv);
     float webcam_greyscale = (webcam.r + webcam.g + webcam.b) / 3.0;
-    if (albedo.r > albedo.g) {
+    if (webcam_enabled && albedo.r > albedo.g) {
         albedo = (albedo * 0.5) + (albedo * webcam_greyscale * 0.5);
     }
 

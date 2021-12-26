@@ -3,6 +3,7 @@ import * as Camera from '../../webgl-framework/DataSources/Camera.js';
 import { loadShader, loadStandardVertexBuffer, loadTexture } from '../../webgl-framework/WebGLUtil.js';
 import { requestImage, requestText } from '../../webgl-framework/Ajax.js';
 import { resources as sharedResources } from '../DataSources/SharedResources.js';
+import * as Webcam from '../DataSources/Webcam.js';
 
 let shader = null;
 let textures = {
@@ -73,7 +74,7 @@ export function update(deltaTime) {
 }
 
 export function onWebcamFrame(now, metadata, canvas) {
-    if (!glContext || !textures.webcam) {
+    if (!glContext || !textures.webcam || !Webcam.settings.enabled) {
         return;
     }
 
@@ -113,6 +114,8 @@ export function render(deltaTime, gl) {
 
     gl.uniform1i(gl.getUniformLocation(shader, "diffuse_texture"), 0);
     gl.uniform1i(gl.getUniformLocation(shader, "webcam_texture"), 1);
+
+    gl.uniform1i(gl.getUniformLocation(shader, "webcam_enabled"), Webcam.settings.enabled ? 1 : 0);
 
     gl.drawElements(gl.TRIANGLES, mesh.numIndices, gl.UNSIGNED_INT, 0);
 
