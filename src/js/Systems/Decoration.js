@@ -126,7 +126,7 @@ export function render(deltaTime, gl) {
 
     gl.uniformMatrix4fv(gl.getUniformLocation(wireShader, "projection"), false, Camera.properties.projectionMatrix);
     gl.uniformMatrix4fv(gl.getUniformLocation(wireShader, "view"), false, Camera.properties.viewMatrix);
-    gl.uniformMatrix4fv(gl.getUniformLocation(wireShader, "model"), false, wireMatrix);
+    gl.uniformMatrix4fv(gl.getUniformLocation(wireShader, "model[0]"), false, wireMatrix);
 
     gl.drawElements(gl.TRIANGLES, quadMesh.numIndices, gl.UNSIGNED_INT, 0);
 }

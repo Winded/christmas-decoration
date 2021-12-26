@@ -3,6 +3,7 @@ import { config as pathConfig } from '../webgl-framework/DataSources/Paths.js';
 import * as Setup from './Systems/Setup.js';
 import * as Decoration from './Systems/Decoration.js';
 import * as Background from './Systems/Background.js';
+import * as Snowfall from './Systems/Snowfall.js';
 import * as Webcam from './DataSources/Webcam.js';
 
 const systems = [
@@ -10,6 +11,7 @@ const systems = [
     Setup,
     Decoration,
     Background,
+    Snowfall,
     ...defaultSystems.postUpdate,
 ];
 

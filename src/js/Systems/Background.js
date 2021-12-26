@@ -46,7 +46,7 @@ export function render(deltaTime, gl) {
 
     gl.uniformMatrix4fv(gl.getUniformLocation(shader, "projection"), false, Camera.properties.projectionMatrix);
     gl.uniformMatrix4fv(gl.getUniformLocation(shader, "view"), false, Camera.properties.viewMatrix);
-    gl.uniformMatrix4fv(gl.getUniformLocation(shader, "model"), false, modelMatrix);
+    gl.uniformMatrix4fv(gl.getUniformLocation(shader, "model[0]"), false, modelMatrix);
 
     gl.drawElements(gl.TRIANGLES, mesh.numIndices, gl.UNSIGNED_INT, 0);
 }
