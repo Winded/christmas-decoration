@@ -8,6 +8,7 @@ let shader = null;
 let textures = {
     diffuse: null,
     specular: null,
+    webcam: null,
 };
 let mesh = null;
 
@@ -27,6 +28,8 @@ const light = {
 
 const ambientLight = vec4.fromValues(0.1, 0.1, 0.1, 1);
 
+let glContext = null;
+
 let ready = false;
 
 /**
@@ -41,6 +44,15 @@ async function setup(gl) {
     wireShader = loadShader(gl, await requestText("/shaders/unlit.vert"), await requestText("/shaders/unlit.frag"));
     wireTexture = loadTexture(gl, await requestImage("/assets/textures/white.png"));
     quadMesh = sharedResources.quadMesh;
+
+    textures.webcam = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, textures.webcam);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 640, 480, 0, gl.RGB, gl.UNSIGNED_BYTE, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+
+    glContext = gl;
 
     ready = true;
 }
@@ -60,6 +72,16 @@ export function update(deltaTime) {
     mat4.rotateY(ballMatrix, ballMatrix, (15 / 180) * Math.PI * deltaTime);
 }
 
+export function onWebcamFrame(now, metadata, canvas) {
+    if (!glContext || !textures.webcam) {
+        return;
+    }
+
+    let gl = glContext;
+    gl.bindTexture(gl.TEXTURE_2D, textures.webcam);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, metadata.width, metadata.height, 0, gl.RGB, gl.UNSIGNED_BYTE, canvas);
+}
+
 /**
  * 
  * @param {float} deltaTime 
@@ -73,7 +95,10 @@ export function render(deltaTime, gl) {
     gl.enable(gl.DEPTH_TEST);
 
     gl.useProgram(shader);
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textures.diffuse);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, textures.webcam);
     gl.bindVertexArray(mesh.vao);
 
     gl.uniformMatrix4fv(gl.getUniformLocation(shader, "projection"), false, Camera.properties.projectionMatrix);
@@ -86,9 +111,13 @@ export function render(deltaTime, gl) {
     gl.uniform1f(gl.getUniformLocation(shader, "light.range"), light.range);
     gl.uniform4fv(gl.getUniformLocation(shader, "ambient_color"), ambientLight);
 
+    gl.uniform1i(gl.getUniformLocation(shader, "diffuse_texture"), 0);
+    gl.uniform1i(gl.getUniformLocation(shader, "webcam_texture"), 1);
+
     gl.drawElements(gl.TRIANGLES, mesh.numIndices, gl.UNSIGNED_INT, 0);
 
     gl.useProgram(wireShader);
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, wireTexture);
     gl.bindVertexArray(quadMesh.vao);
 

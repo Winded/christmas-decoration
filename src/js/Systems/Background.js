@@ -40,6 +40,7 @@ export function render(deltaTime, gl) {
     gl.enable(gl.DEPTH_TEST);
 
     gl.useProgram(shader);
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.bindVertexArray(mesh.vao);
 
