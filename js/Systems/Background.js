@@ -14,8 +14,8 @@ let ready = false;
 
 async function setup(gl) {
     mesh = SharedResources.resources.quadMesh;
-    texture = loadTexture(gl, await requestImage("/assets/textures/background.png"));
-    shader = loadShader(gl, await requestText("/shaders/unlit.vert"), await requestText("/shaders/unlit.frag"));
+    texture = loadTexture(gl, await requestImage("assets/textures/background.png"));
+    shader = loadShader(gl, await requestText("shaders/unlit.vert"), await requestText("shaders/unlit.frag"));
 
     mat4.translate(modelMatrix, modelMatrix, vec3.fromValues(0, 0, -10));
     mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(30, 25, 1));

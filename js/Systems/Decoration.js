@@ -38,12 +38,12 @@ let ready = false;
  * @param {WebGL2RenderingContext} gl 
  */
 async function setup(gl) {
-    shader = loadShader(gl, await requestText("/shaders/ball.vert"), await requestText("/shaders/ball.frag"));
-    textures.diffuse = loadTexture(gl, await requestImage("/assets/textures/snowflake-ball.png"));
+    shader = loadShader(gl, await requestText("shaders/ball.vert"), await requestText("shaders/ball.frag"));
+    textures.diffuse = loadTexture(gl, await requestImage("assets/textures/snowflake-ball.png"));
     mesh = sharedResources.sphereMesh;
 
-    wireShader = loadShader(gl, await requestText("/shaders/unlit.vert"), await requestText("/shaders/unlit.frag"));
-    wireTexture = loadTexture(gl, await requestImage("/assets/textures/white.png"));
+    wireShader = loadShader(gl, await requestText("shaders/unlit.vert"), await requestText("shaders/unlit.frag"));
+    wireTexture = loadTexture(gl, await requestImage("assets/textures/white.png"));
     quadMesh = sharedResources.quadMesh;
 
     textures.webcam = gl.createTexture();

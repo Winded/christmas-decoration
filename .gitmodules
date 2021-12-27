@@ -1,3 +1,0 @@
-[submodule "src/webgl-framework"]
-	path = src/webgl-framework
-	url = git@github.com:Winded/webgl-framework.git

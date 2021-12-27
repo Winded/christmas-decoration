@@ -47,8 +47,8 @@ function createSnowflake() {
  */
 async function setup(gl) {
     mesh = SharedResources.resources.quadMesh;
-    texture = loadTexture(gl, await requestImage("/assets/textures/snowflake.png"));
-    shader = loadShader(gl, await requestText("/shaders/unlit.vert"), await requestText("/shaders/unlit.frag"));
+    texture = loadTexture(gl, await requestImage("assets/textures/snowflake.png"));
+    shader = loadShader(gl, await requestText("shaders/unlit.vert"), await requestText("shaders/unlit.frag"));
 
     ready = true;
 }

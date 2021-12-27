@@ -16,7 +16,7 @@ const systems = [
 ];
 
 async function main() {
-    pathConfig.pathPrefix = '/webgl-framework';
+    pathConfig.pathPrefix = '/christmas-decoration/webgl-framework';
 
     let webcam = document.getElementById("webcam");
     let webcamToggle = document.getElementById("webcam_toggle");
